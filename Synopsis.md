@@ -2,17 +2,17 @@
 
 ## Background and Motivation
 
-The accurate prediction of chemical properties and efficient simulation of molecular dynamics are critical to advancements in fields like drug discovery, materials science, and chemical engineering. Traditional computational methods, while precise, often involve complex calculations that can be prohibitively slow and computationally expensive, especially for large molecules or extensive datasets. One promising alternative is Graph Neural Networks (GNNs), which has become a dominant and fast-growing in deep learning with graph data [[3]](#3).
+The accurate prediction of chemical properties and efficient simulation of molecular dynamics are critical to advancements in fields like drug discovery, materials science, and chemical engineering. Traditional computational methods, while precise, often involve complex calculations that can be prohibitively slow and computationally expensive, especially for large molecules or extensive datasets. One promising alternative is Graph Neural Networks (GNNs), which has become a dominant and fast-growing method in deep learning with graph data [[3]](#3).
 
-Molecules have specific configurations that can be represented as graphs of atoms and bounds. These structures can be handled by GNNs that preserve molecular properties and structures. However, given that standard message passing formulations do not consider rotationally equivariant representations, Kristof T. Schütt, et al. ([[1]](#1)) proposed a different approach: Polarizable Atom Interaction Neural Networn (PaiNN). This approach captures geometric information and physical interactions, as it takes into account rotational equivariance of molecules.
+Molecules have specific configurations that can be represented as graphs of atoms and bounds. These structures can be handled by GNNs that preserve molecular properties and structures. However, given that standard message passing formulations do not consider rotationally equivariant representations, Kristof T. Schütt, et al. ([[1]](#1)), proposed a different approach: Polarizable Atom Interaction Neural Networn (PaiNN). This approach captures geometric information and physical interactions, as it takes into account rotational equivariance of molecules.
 
-Therefore, the main goal of this project is to implement PaiNN and apply it to molecular property prediction using QM9 dataset, which includes geometric, energetic, electronic and thermodynamic properties of 134k stable small organic molecules made up of CHONF ([[4]](#4), [[5]](#5), [[6]](#6)).
+Therefore, the main goal of this project is to implement PaiNN and apply it to molecular property prediction using the QM9 dataset, which includes geometric, energetic, electronic and thermodynamic properties of 134k small stable organic molecules made up of CHONF ([[4]](#4), [[5]](#5), [[6]](#6)).
 
 Further work can include experimentation of enhancements to PaiNN with Stochastic Weight Averaging and/or layer optimization
 
 ## Milestones (time plan)
 1. week 45: 
-    - Project overview and dicussion for initial steps;
+    - Project overview and dicussion of initial steps;
     - Literature review on provided resources about GNN and PaiNN;
     - Understand inputs and outputs of PaiNN;
     - Synopsis.
