@@ -61,7 +61,7 @@ class AtomNeighbours:
 
         # Step 5: Stack the results into a matrix where each row corresponds to:
         # [atom_i_index, atom_j_index, x_ij, y_ij, z_ij, d_ij]
-        neig_matrix = torch.stack([idx_i.int(), idx_j.int(), x_ij, y_ij, z_ij, d_ij], dim=1)
+        neig_matrix = torch.stack([idx_i.to(torch.int), idx_j.to(torch.int), x_ij, y_ij, z_ij, d_ij], dim=1)
 
         # Step 6: Filter out atom pairs where the distance is greater than the cutoff.
         neig_matrix = neig_matrix[d_ij <= self.cutoff]
