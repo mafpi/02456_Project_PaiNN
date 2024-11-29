@@ -29,8 +29,8 @@ How to setup the HPC with GPU runnning
 
 ## Structure of job.sh
 #!/bin/bash
-#BSUB -q gpua100                  ->>>>>>>>>>>> name of queue, gpu queue, jobs need to be in a queue  \
-#BSUB -J painn5layers_     ->>>>>>>>>>>>> this is the job id and some numbers, like : painn5layers_XXXXXX, you can see the numbers when running bstat or your email. \
+#BSUB -q gpua100                  ->>>>>>>>>>>> name of queue, gpu queue, jobs need to be in a queue  \\
+#BSUB -J painn5layers_     ->>>>>>>>>>>>> this is the job id and some numbers, like : painn5layers_XXXXXX, you can see the numbers when running bstat or your email. \\
 #BSUB -n 8                   ->>>>>>>>>>>> number of cores \
 #BSUB -R "span[hosts=1]"                     ->>>>>>>>>>>> just runnign in the same machine \
 #BSUB -R "rusage[mem=512MB]"                     ->>>>>>>>>>>> requested each core to have at least 512MB of memory \
