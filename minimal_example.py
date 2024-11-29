@@ -26,7 +26,7 @@ def cli():
     parser.add_argument('--subset_size', default=None, type=int)
 
     # Model
-    parser.add_argument('--num_message_passing_layers', default=3, type=int)
+    parser.add_argument('--num_message_passing_layers', default=5, type=int)
     parser.add_argument('--num_features', default=128, type=int)
     parser.add_argument('--num_outputs', default=1, type=int)
     parser.add_argument('--num_rbf_features', default=20, type=int)
@@ -102,7 +102,6 @@ def main():
                 graph_indexes=batch.batch,
                 atomic_contributions=atomic_contributions,
             )
-            break
             loss_step = F.mse_loss(preds, batch.y, reduction='sum')
 
             loss = loss_step / len(batch.y)
@@ -111,32 +110,37 @@ def main():
             optimizer.step()
 
             loss_epoch += loss_step.detach().item()
-        break
         loss_epoch /= len(dm.data_train)
         pbar.set_postfix_str(f'Train loss: {loss_epoch:.3e}')
 
-    # mae = 0
-    # painn.eval()
-    # with torch.no_grad():
-    #     for batch in dm.test_dataloader():
-    #         batch = batch.to(device)
+    mae = 0
+    painn.eval()
+    with torch.no_grad():
+        for batch in dm.test_dataloader():
+            batch = batch.to(device)
 
-    #         atomic_contributions = painn(
-    #             atoms=batch.z,
-    #             atom_positions=batch.pos,
-    #             graph_indexes=batch.batch,
-    #         )
-    #         preds = post_processing(
-    #             atoms=batch.z,
-    #             graph_indexes=batch.batch,
-    #             atomic_contributions=atomic_contributions,
-    #         )
-    #         mae += F.l1_loss(preds, batch.y, reduction='sum')
+            atomic_contributions = painn(
+                atoms=batch.z,
+                atom_positions=batch.pos,
+                graph_indexes=batch.batch,
+            )
+            preds = post_processing(
+                atoms=batch.z,
+                graph_indexes=batch.batch,
+                atomic_contributions=atomic_contributions,
+            )
+            mae += F.l1_loss(preds, batch.y, reduction='sum')
     
-    # mae /= len(dm.data_test)
-    # unit_conversion = dm.unit_conversion[args.target]
-    # print(f'Test MAE: {unit_conversion(mae):.3f}')
+    mae /= len(dm.data_test)
+    unit_conversion = dm.unit_conversion[args.target]
+    print(f'Test MAE: {unit_conversion(mae):.3f}')
 
+    test_mae = unit_conversion(mae)
+
+    # Save to a text file
+    output_text = f'Test MAE: {test_mae:.3f}'
+    with open('test_results_5.txt', 'w') as file:
+        file.write(output_text)
 
 if __name__ == '__main__':
     main()

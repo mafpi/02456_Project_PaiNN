@@ -8,7 +8,7 @@ class PaiNN(nn.Module):
     """
     def __init__(
         self,
-        num_message_passing_layers: int = 3,
+        num_message_passing_layers: int = 5,
         num_features: int = 128,
         num_outputs: int = 1,
         num_rbf_features: int = 20,
@@ -26,7 +26,7 @@ class PaiNN(nn.Module):
                 distances.
             num_unique_atoms: Number of unique atoms in the data that we want
                 to learn embeddings for.
-            cutoff_dist: Euclidean distance threshold for determining whether
+            cutoff_dist: Euclidean distance threshold for determining whether 
                 two nodes (atoms) are neighbours.
         """
         super().__init__()
@@ -46,7 +46,7 @@ class PaiNN(nn.Module):
             nn.SiLU(),
             nn.Linear(num_features, num_outputs),
         )
-
+        
         self.AN = AN.AtomNeighbours(cutoff_dist)
 
         self.num_features = num_features
@@ -70,7 +70,7 @@ class PaiNN(nn.Module):
                 node in the graph.
             atom_positions: torch.FloatTensor of size [num_nodes, 3] with
                 euclidean coordinates of each node / atom.
-            graph_indexes: torch.LongTensor of size [num_nodes] with the graph
+            graph_indexes: torch.LongTensor of size [num_nodes] with the graph 
                 index each node belongs to.
 
         Returns:
@@ -81,7 +81,7 @@ class PaiNN(nn.Module):
         self.adj_matrix = self.AN.neigbourhood_matrix(atom_positions, graph_indexes)
 
         node_scalar = self.scalar_embedding(atoms)
-        node_vector = torch.zeros(atoms.size(0), self.num_features, 3, device=atoms.device)
+        node_vector = torch.zeros(atoms.size(0), self.num_features, 3, device = atoms.device)
 
         for message_layer, update_layer in zip(self.message_layer, self.update_layer):
             node_scalar, node_vector = message_layer(node_scalar, node_vector, self.adj_matrix)
@@ -131,7 +131,7 @@ class MessagePaiNN(nn.Module):
         #         distances.
         #     num_unique_atoms: Number of unique atoms in the data that we want
         #         to learn embeddings for.
-        #     cutoff_dist: Euclidean distance threshold for determining whether
+        #     cutoff_dist: Euclidean distance threshold for determining whether 
         #         two nodes (atoms) are neighbours.
         # """
         super().__init__()
@@ -171,7 +171,7 @@ class MessagePaiNN(nn.Module):
 
         r_ij_dist = adj_matrix[:, 5]
 
-        rbf = self.layer_rbf(sinc_expansion(r_ij_dist, self.num_rbf_features, self.cutoff_dist))
+        rbf = self.layer_rbf(sinc_expansion(r_ij_dist, self.num_rbf_features, self.cutoff_dist)) 
 
         rbf_cos_cutoff = rbf * cosine_cutoff(r_ij_dist, self.cutoff_dist).unsqueeze(-1)
         # print("rbf_cos_cutoff shape", rbf_cos_cutoff.shape)
@@ -190,10 +190,10 @@ class MessagePaiNN(nn.Module):
 
         r_ij = adj_matrix[:, 2:5]
 
-        r_ij_standardized = r_ij /r_ij_dist.unsqueeze(-1)
+        r_ij_standardized = r_ij /r_ij_dist.unsqueeze(-1) 
 
         # print("r_ij_standardized shape", r_ij_standardized.unsqueeze(1).shape)
-
+        
         message_edge = split3.unsqueeze(-1) * r_ij_standardized.unsqueeze(1)
 
         message_vector = node_vector[adj_matrix[:, 1].long()] * split1.unsqueeze(-1) + message_edge
@@ -203,10 +203,10 @@ class MessagePaiNN(nn.Module):
 
         # list_neighbours: index of the neighbours of atom i
         delta_s.index_add_(0, adj_matrix[:, 0].long(), split2)
-        delta_v.index_add_(0, adj_matrix[:, 0].long(), message_vector)
+        delta_v.index_add_(0, adj_matrix[:, 0].long(), message_vector)        
 
         return node_scalar + delta_s, node_vector + delta_v
-
+    
 
 
 
@@ -256,7 +256,7 @@ class UpdatePaiNN(nn.Module):
         V = V.permute(0,2,1)
 
         V_norm = torch.norm(V, dim = -1)
-
+      
         pre_split_s = self.scalar_update(torch.cat((V_norm, node_scalar), dim = 1))
 
         a_vv, a_sv, a_ss = torch.split(pre_split_s, self.num_features, dim = 1)
@@ -264,7 +264,7 @@ class UpdatePaiNN(nn.Module):
         delta_v = a_vv.unsqueeze(2) * U
 
         inner_prod = torch.sum(U * V, dim=2)
-
-        delta_s = inner_prod * a_sv + a_ss
+        
+        delta_s = inner_prod * a_sv + a_ss  
 
         return node_scalar + delta_s, node_vector + delta_v
