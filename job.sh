@@ -13,4 +13,4 @@
 # Initialize Python environment
 hpcintrogpush
 
-python mininal_example.py
+python minimal_example.py
