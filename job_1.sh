@@ -13,4 +13,4 @@
 
 cd /dtu/blackhole/00/202496/02456_Project_PaiNN
 
-python minimal_example.py --num_message_passing_layers 3
+python minimal_example.py --num_message_passing_layers 1
