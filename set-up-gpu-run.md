@@ -28,22 +28,22 @@ How to setup the HPC with GPU runnning
 
 
 ## Structure of job.sh
-#!/bin/bash
-#BSUB -q gpua100                  ->>>>>>>>>>>> name of queue, gpu queue, jobs need to be in a queue 
-#BSUB -J painn5layers_     ->>>>>>>>>>>>> this is the job id and some numbers, like : painn5layers_XXXXXX, you can see the numbers when running bstat or your email.
-#BSUB -n 8                   ->>>>>>>>>>>> number of cores
-#BSUB -R "span[hosts=1]"                     ->>>>>>>>>>>> just runnign in the same machine
-#BSUB -R "rusage[mem=512MB]"                     ->>>>>>>>>>>> requested each core to have at least 512MB of memory
-#BSUB -gpu "num=1:mode=exclusive_process"                          ->>>>>>>>>>>> just requesting the GPU
-#BSUB -W 15:00             ->>>>>>>>>>>> max hours to run
-#BSUB -B              ->>>>>>>>>>>> receive email at start
-#BSUB -N              ->>>>>>>>>>>> receive email at finish
-#BSUB -o painn5layers_%J.out                  ->>>>>>>>>>>> outuput of py code
-#BSUB -e painn5layers_%J.err                  ->>>>>>>>>>>> outuput of portantial errors/prints in console
+- #!/bin/bash
+- #BSUB -q gpua100                  ->>>>>>>>>>>> name of queue, gpu queue, jobs need to be in a queue 
+- #BSUB -J painn5layers_     ->>>>>>>>>>>>> this is the job id and some numbers, like : painn5layers_XXXXXX, you can see the numbers when running bstat or your email.
+- #BSUB -n 8                   ->>>>>>>>>>>> number of cores 
+- #BSUB -R "span[hosts=1]"                     ->>>>>>>>>>>> just runnign in the same machine 
+- #BSUB -R "rusage[mem=512MB]"                     ->>>>>>>>>>>> requested each core to have at least 512MB of memory 
+- #BSUB -gpu "num=1:mode=exclusive_process"                          ->>>>>>>>>>>> just requesting the GPU 
+- #BSUB -W 15:00             ->>>>>>>>>>>> max hours to run 
+- #BSUB -B              ->>>>>>>>>>>> receive email at start 
+- #BSUB -N              ->>>>>>>>>>>> receive email at finish 
+- #BSUB -o painn5layers_%J.out                  ->>>>>>>>>>>> outuput of py code 
+- #BSUB -e painn5layers_%J.err                  ->>>>>>>>>>>> outuput of portantial errors/prints in console 
 
-cd /dtu/blackhole/00/202496/02456_Project_PaiNN               ->>>>>>>>>>>> replace with your directory from the blackhole and wher you run your minimal_example.py
+- cd /dtu/blackhole/00/202496/02456_Project_PaiNN               ->>>>>>>>>>>> replace with your directory from the blackhole and wher you run your minimal_example.py 
 
-hpcintrogpush           
+- hpcintrogpush           
 
-python minimal_example.py
+- python minimal_example.py
 
