@@ -13,6 +13,7 @@ from src.models import PaiNN, AtomwisePostProcessing
 from matplotlib import pyplot as plt
 import torch.optim as optim
 from swag.posteriors.swag import SWAG
+import numpy as np
 
 def cli():
     parser = argparse.ArgumentParser()
@@ -87,8 +88,7 @@ def run_experiment(args):
     optimizer = optim.SGD(painn.parameters(), lr=args.swag_lr, momentum=0.9)
 
     # Wrap PaiNN with SWAG
-    swag_model = SWAG(
-        PaiNN).to(device)
+    swag_model = SWAG(PaiNN).to(device)
 
     train_losses = []
 
@@ -132,7 +132,7 @@ def run_experiment(args):
 
         # Evaluate SWAG model
         # Sample weights from SWAG posterior
-        num_samples = 10  # Number of posterior samples
+        num_samples = 30  # Number of posterior samples
         swag_model.eval()
         mae = 0
         for i in range(num_samples):
@@ -153,6 +153,9 @@ def run_experiment(args):
                         graph_indexes=batch.batch,
                         atomic_contributions=atomic_contributions,
                     )
+                    # store preds
+        # mean of preds
+        # compute loss
                     mae += F.l1_loss(preds, batch.y, reduction='sum')
 
 
@@ -179,7 +182,7 @@ def run_experiment(args):
 
 if __name__ == '__main__':
     args = cli()
-    learning_rates = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9]  
+    learning_rates = np.logspace(-10, -5, num=10)  
     results = []
 
     for lr in learning_rates:

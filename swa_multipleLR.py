@@ -13,6 +13,7 @@ from src.models import PaiNN, AtomwisePostProcessing
 from matplotlib import pyplot as plt
 import torch.optim as optim
 from torch.optim.swa_utils import AveragedModel
+import numpy as np
 
 def cli():
     parser = argparse.ArgumentParser()
@@ -76,7 +77,7 @@ def run_experiment(args):
     ).to(device)
 
     # Load the pre-trained model weights
-    painn.load_state_dict(torch.load("best_model_3_layer.pth", map_location = device))
+    painn.load_state_dict(torch.load("Results/best_model.pth", map_location = device))
 
     post_processing = AtomwisePostProcessing(
         args.num_outputs, y_mean, y_std, atom_refs
@@ -166,7 +167,7 @@ def run_experiment(args):
 
 if __name__ == '__main__':
     args = cli()
-    learning_rates = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9]  
+    learning_rates = [10**-7]
     results = []
 
     for lr in learning_rates:
