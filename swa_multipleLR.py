@@ -13,6 +13,7 @@ from src.models import PaiNN, AtomwisePostProcessing
 from matplotlib import pyplot as plt
 import torch.optim as optim
 from torch.optim.swa_utils import AveragedModel
+import numpy as np
 
 def cli():
     parser = argparse.ArgumentParser()
@@ -166,7 +167,7 @@ def run_experiment(args):
 
 if __name__ == '__main__':
     args = cli()
-    learning_rates = [float(10**-4), float(10**-5), float(10**-6), float(10**-7), float(10**-8), float(10**-9)]
+    learning_rates = np.logspace(-10, -5, num=10)
     results = []
 
     for lr in learning_rates:
