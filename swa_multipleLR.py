@@ -167,7 +167,7 @@ def run_experiment(args):
 
 if __name__ == '__main__':
     args = cli()
-    learning_rates = np.logspace(-10, -5, num=10)
+    learning_rates = [10**-7]
     results = []
 
     for lr in learning_rates:
