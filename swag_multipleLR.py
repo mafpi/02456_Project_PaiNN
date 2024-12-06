@@ -78,7 +78,7 @@ def run_experiment(args):
     ).to(device)
 
     # Load the pre-trained model weights
-    painn.load_state_dict(torch.load("best_model_3_layer.pth", map_location = device))
+    painn.load_state_dict(torch.load("best_model.pth", map_location = device))
 
     post_processing = AtomwisePostProcessing(
         args.num_outputs, y_mean, y_std, atom_refs
@@ -94,14 +94,11 @@ def run_experiment(args):
 
     # Training Loop
     painn.train()
-    pbar = trange(3)
+    pbar = trange(args.num_epochs)
     for epoch in pbar:
         loss_epoch = 0.
-        batch_counter = 0
         for batch in dm.train_dataloader():
             batch = batch.to(device)
-            if batch_counter >= 3:  # Break after processing 3 batches
-                break
 
             atomic_contributions = painn(
                 atoms=batch.z,
@@ -121,7 +118,8 @@ def run_experiment(args):
             optimizer.step()
 
             loss_epoch += loss_step.detach().item()
-            batch_counter += 1
+
+
         loss_epoch /= len(dm.data_train)
         train_losses.append(loss_epoch)
         
@@ -129,37 +127,49 @@ def run_experiment(args):
 
         swag_model.collect_model(painn)
 
+    # Evaluate SWAG model
+    # Sample weights from SWAG posterior
+    num_samples = 30  # Number of posterior samples
+    swag_model.eval()
+    mae = 0
 
-        # Evaluate SWAG model
-        # Sample weights from SWAG posterior
-        num_samples = 30  # Number of posterior samples
-        swag_model.eval()
-        mae = 0
-        for i in range(num_samples):
-            swag_model.sample()  # Sample weights
-
-            # Evaluate sampled model
-            with torch.no_grad():
-                for batch in dm.test_dataloader():
-                    batch = batch.to(device)
-
-                    atomic_contributions = swag_model(
-                        atoms=batch.z,
-                        atom_positions=batch.pos,
-                        graph_indexes=batch.batch,
-                    )
-                    preds = post_processing(
-                        atoms=batch.z,
-                        graph_indexes=batch.batch,
-                        atomic_contributions=atomic_contributions,
-                    )
-                    # store preds
-        # mean of preds
-        # compute loss
-                    mae += F.l1_loss(preds, batch.y, reduction='sum')
+    num_test_samples = len(dm.test_dataloader().dataset)
+    all_preds = torch.zeros(num_samples, num_test_samples).to(device)  # To store predictions for each model sample
+    all_true_labels = torch.zeros(num_test_samples).to(device)
 
 
-    mae /= (len(dm.data_test) * num_samples)
+    for i in range(num_samples):
+        swag_model.sample()  # Sample weights
+
+        preds_for_sample = torch.zeros(num_test_samples).to(device)
+
+        with torch.no_grad():
+            for batch in dm.test_dataloader():
+                batch = batch.to(device)
+            
+                
+                atomic_contributions = swag_model(
+                    atoms=batch.z,
+                    atom_positions=batch.pos,
+                    graph_indexes=batch.batch,
+                )
+                preds = post_processing(
+                    atoms=batch.z,
+                    graph_indexes=batch.batch,
+                    atomic_contributions=atomic_contributions,
+                )
+
+                batch_size = preds.size(0)
+                preds_for_sample[idx:idx + batch_size] = preds.squeeze()
+                idx += batch_size
+
+                all_true_labels[idx:idx + batch_size] = batch.y.squeeze()
+
+        all_preds[i] = preds_for_sample
+    avg_preds = torch.mean(all_preds, dim=0)   
+    mae = F.l1_loss(avg_preds, all_true_labels, reduction='sum')
+
+    mae /= (len(dm.data_test))
     unit_conversion = dm.unit_conversion[args.target]
 
     test_mae = unit_conversion(mae)
@@ -182,7 +192,8 @@ def run_experiment(args):
 
 if __name__ == '__main__':
     args = cli()
-    learning_rates = np.logspace(-10, -5, num=10)  
+    learning_rates = np.logspace(-10, -5, num=10) 
+    print(learning_rates) 
     results = []
 
     for lr in learning_rates:
