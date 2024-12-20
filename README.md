@@ -7,10 +7,10 @@ To enhance performance, **Stochastic Weight Averaging (SWA)** and its Gaussian v
 ## Most Notable Parts
 
 1. **[report.pdf](report.pdf)**  
-   An overview of the project. This should be read first for a complete understanding of the code and methodology.
+   An overview of the project. This should be read first for a complete understanding of the code and its methodology.
 
 2. **[paiNN_simple.ipynb](paiNN_simple.ipynb)**  
-   Implements the Polarizable Atom Interaction Neural Network (PaiNN) for predicting molecular properties using the QM9 dataset. The target property is the "internal energy at 0K".  
+   Implements the Polarizable Atom Interaction Neural Network (PaiNN) for predicting molecular properties using the QM9 dataset. The target property is the internal energy at 0K.  
    - Investigation of the PaiNN model described in the original [paper](https://arxiv.org/pdf/2102.03150).  
    - Examines the effects of varying the number of layers.
 
@@ -25,9 +25,8 @@ To enhance performance, **Stochastic Weight Averaging (SWA)** and its Gaussian v
 ---
 
 ## Other Modules
-1. [src.Synopsis.md](src/Synopsis.md): This file outlines the project plan for "02456 Molecular Property Prediction using Graph Neural Networks".
-
-2. [src.data.AtomNeighbours](src/data/AtomNeighbours.py): A module to calculate the neighborhood adjacency matrix for atoms within a certain cutoff distance in each graph of a batch.
+1. [src.Synopsis.md](src/Synopsis.md): This file outlines the project plan.
+2. [src.data.AtomNeighbours](src/data/AtomNeighbours.py): A module to calculate the neighborhood adjacency matrix for atoms within a certain cutoff distance in each graph.
 
 3. [src.data.testAtomNeighbours](src/data/AtomNeighbours.py): Automatic tests of correctness of [src.data.AtomNeighbours](src/data/AtomNeighbours.py)
 
