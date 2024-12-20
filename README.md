@@ -25,7 +25,7 @@ To enhance performance, **Stochastic Weight Averaging (SWA)** and its Gaussian v
    An overview of the project. This should be read first for a complete understanding of the code and methodology.
 
 2. **[paiNN_simple.ipynb](paiNN_simple.ipynb)**  
-   Implements the Polarizable Atom Interaction Neural Network (PaiNN) for predicting molecular properties using the QM9 dataset. The target property is the "internal energy at 0K," computed as a sum of atomic contributions.  
+   Implements the Polarizable Atom Interaction Neural Network (PaiNN) for predicting molecular properties using the QM9 dataset. The target property is the "internal energy at 0K".  
    - Investigation of the PaiNN model described in the original [paper](https://arxiv.org/pdf/2102.03150).  
    - Examines the effects of varying the number of layers.
 
