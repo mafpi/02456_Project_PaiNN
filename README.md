@@ -1,11 +1,10 @@
 # 02456 Molecular Property Prediction using Graph Neural Networks
 ## Description
-This project uses the Polarizable Atom Interaction Neural Network (PaiNN) to predict molecular properties based on the QM9 dataset. The focus is on predicting the internal energy at 0K with high accuracy using rotationally equivariant graph neural networks.
+This project implements the Polarizable Atom Interaction Neural Network (PaiNN) to predict molecular properties based on the QM9 dataset. The focus is on predicting the internal energy at 0K with high accuracy using rotationally equivariant graph neural networks.
 
 ## Most Notable Parts
 
-1. **Report**: 
-   - [report](report.pdf): overview of the project
+1. **[Report](report.pdf)**: overview of the project
 
 2. **SWAG**:
    - [SWAG](paiNN_SWAG.ipynb):  Investigation of effect of stochastic weight averaging with Gaussian (SWAG)
