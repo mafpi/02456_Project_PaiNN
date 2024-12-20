@@ -3,7 +3,7 @@ import torch
 class AtomNeighbours:
     """
     A class to calculate the neighborhood adjacency matrix for atoms within a certain cutoff distance
-    in each graph of a batch. (One atom is not neighbor of itself), (Neighbors are only in the same molelcule)
+    in each graph of a batch. (One atom is not neighbour of itself), (Neighbors are only in the same molelcule)
     """
     
     def __init__(self, cutoff:float):
