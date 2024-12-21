@@ -111,7 +111,7 @@ class AtomNeighboursTests(unittest.TestCase):
         """
         cutoff = 1.5
         atom_neighbours = AtomNeighbours(cutoff)
-        adjacency_data_torch = atom_neighbours.neigbourhood_matrix(self.batch)
+        adjacency_data_torch = atom_neighbours.neigbourhood_matrix(self.batch.pos, self.batch.batch)
 
         # Convert expected data to tensor and compare
         expected_adjacency_data_torch = torch.tensor(self.expected_data_rows, dtype=torch.float)
@@ -137,7 +137,7 @@ class AtomNeighboursTests(unittest.TestCase):
         # Create an instance of AtomNeighbours with a cutoff of 1.5
         cutoff = 1.5
         atom_neighbours = AtomNeighbours(cutoff)
-        adjacency_data_torch = atom_neighbours.neigbourhood_matrix(batch)
+        adjacency_data_torch = atom_neighbours.neigbourhood_matrix(batch.pos, batch.batch)
 
         # Run the general checks
         self._run_general_checks(adjacency_data_torch, batch, cutoff)
