@@ -24,7 +24,7 @@ To enhance performance, **Stochastic Weight Averaging (SWA)** and its Gaussian v
 
 ---
 
-## Other Modules
+## Other Important Modules
 1. [Synopsis.md](Synopsis.md): This file outlines the project plan.
 2. [src.data.AtomNeighbours](src/data/AtomNeighbours.py): A module to calculate the neighborhood adjacency matrix for atoms within a certain cutoff distance in each graph.
 
