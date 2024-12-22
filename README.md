@@ -33,3 +33,5 @@ To enhance performance, **Stochastic Weight Averaging (SWA)** and its Gaussian v
 4. [hpc_script](hpc_script): Scripts to run the models on HPC.
 
 5. [Results](Results): Results of tests on HPC.
+
+6. [Poster.pdf](poster.pdf): Poster used for the presentation.
